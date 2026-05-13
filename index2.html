@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>カメラ起動＋保存サンプル</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h2>カメラ起動テスト（保存機能付き）</h2>
+
+  <!-- カメラ起動 -->
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+    id="cameraInput"
+  >
+
+  <br><br>
+
+  <!-- プレビュー -->
+  <img id="preview" style="max-width:100%; display:none;">
+
+  <br><br>
+
+  <!-- 保存ボタン -->
+  <button id="saveBtn" disabled>保存（ダウンロード）</button>
+
+  <!-- 説明 -->
+  <p style="font-size: 0.9em; color: #555;">
+    ※ Android：ダウンロードフォルダに保存されます<br>
+    ※ iPhone：保存後「ファイル」アプリに入ります。<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;写真アプリに入れる場合は画像を長押しして保存してください
+  </p>
+
+  <script>
+    let currentFile = null;
+
+    // 画像選択（撮影後）
+    document.getElementById('cameraInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      currentFile = file;
+
+      const img = document.getElementById('preview');
+      img.src = URL.createObjectURL(file);
+      img.style.display = 'block';
+
+      // 保存ボタン有効化
+      document.getElementById('saveBtn').disabled = false;
+    });
+
+    // 保存ボタン押下
+    document.getElementById('saveBtn').addEventListener('click', function () {
+      if (!currentFile) return;
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(currentFile);
+
+      // ファイル名（日時付き）
+      const now = new Date();
+      const fileName = `photo_${now.getFullYear()}${(now.getMonth()+1)
+        .toString().padStart(2,'0')}${now.getDate()
+        .toString().padStart(2,'0')}_${now.getHours()
+        .toString().padStart(2,'0')}${now.getMinutes()
+        .toString().padStart(2,'0')}${now.getSeconds()
+        .toString().padStart(2,'0')}.jpg`;
+
+      a.download = fileName;
+      a.click();
+    });
+  </script>
+
+</body>
+</html>
