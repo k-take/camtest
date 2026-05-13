@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>カメラ即保存サンプル</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h2>撮影 → 自動保存</h2>
+
+  <!-- カメラ起動 -->
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+    id="cameraInput"
+    style="font-size:20px; padding:10px;"
+  >
+
+  <br><br>
+
+  <!-- プレビュー -->
+  <img id="preview" style="max-width:100%; display:none;">
+
+  <p id="message" style="color:green;"></p>
+
+  <script>
+    document.getElementById('cameraInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // プレビュー表示
+      const img = document.getElementById('preview');
+      img.src = URL.createObjectURL(file);
+      img.style.display = 'block';
+
+      // ファイル名生成（日時）
+      const now = new Date();
+      const fileName = `photo_${now.getFullYear()}${(now.getMonth()+1)
+        .toString().padStart(2,'0')}${now.getDate()
+        .toString().padStart(2,'0')}_${now.getHours()
+        .toString().padStart(2,'0')}${now.getMinutes()
+        .toString().padStart(2,'0')}${now.getSeconds()
+        .toString().padStart(2,'0')}.jpg`;
+
+      // ★ 即ダウンロード（可能な限り自動）
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(file);
+      a.download = fileName;
+      a.click();
+
+      // メッセージ表示
+      document.getElementById('message').textContent =
+        '写真を端末に保存しました';
+
+      // 同じ入力を再度使えるようにリセット
+      e.target.value = '';
+    });
+  </script>
+
+  <p style="font-size: 0.9em; color: #555;">
+    ※ Android：撮影後に自動で保存されます<br>
+    ※ iPhone：自動保存されない場合は画像を長押しして「写真に追加」を選択してください
+  </p>
+
+</body>
+</html>
+``
