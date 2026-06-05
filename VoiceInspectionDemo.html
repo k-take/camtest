@@ -20,7 +20,7 @@ button { width:100%; padding:10px; margin-top:5px; font-size:16px; }
 </head>
 
 <body>
-<div class="header" id="header">災害調査AI音声解析デモ（Mock版）</div>
+<div class="header" id="header">災害調査AI音声解析デモ（Mock）</div>
 
 <div class="container">
 
@@ -131,7 +131,9 @@ function startRecognition(){
 
   // ★自動再開（止まらない）
   recognition.onend = function(){
-    if (recognizing) recognition.start();
+    if (recognizing && isMobile) {
+      recognition.start();
+    }
   };
 
   recognition.start();
