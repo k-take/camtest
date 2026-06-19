@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>災害調査AI音声解析デモ</title>
+<title>災害調査AI音声解析デモ.</title>
 
 <style>
 body { font-family: sans-serif; margin:0; background:#f5f5f5; transition:0.3s; }
@@ -20,7 +20,7 @@ button { width:100%; padding:10px; margin-top:5px; font-size:16px; }
 </head>
 
 <body>
-<div class="header" id="header">災害調査AI音声解析デモ（Mock）</div>
+<div class="header" id="header">災害調査AI音声解析デモ.</div>
 
 <div class="container">
 
@@ -32,7 +32,7 @@ button { width:100%; padding:10px; margin-top:5px; font-size:16px; }
 </div>
 
 <div class="card">
-<label>① 路面差</label><br>
+<label>① 路面との段差</label><br>
 <select id="diffType">
 <option>なし</option><option>浮上</option><option>沈下</option>
 </select>
@@ -40,7 +40,7 @@ button { width:100%; padding:10px; margin-top:5px; font-size:16px; }
 </div>
 
 <div class="card">
-<label>② 道路状況</label>
+<label>② 周辺道路状況</label>
 <div class="grid">
 <label><input type="checkbox" id="collapse">陥没</label>
 <label><input type="checkbox" id="uplift">隆起</label>
@@ -50,7 +50,7 @@ button { width:100%; padding:10px; margin-top:5px; font-size:16px; }
 </div>
 
 <div class="card">
-<label>③ マンホール</label>
+<label>③ マンホール蓋の状況</label><br>
 <select id="manhole">
 <option>不明</option><option>異状なし</option>
 <option>破損</option><option>ずれ</option>
@@ -58,17 +58,17 @@ button { width:100%; padding:10px; margin-top:5px; font-size:16px; }
 </div>
 
 <div class="card">
-<label>④ 通行</label>
+<label>④ 車両通行の可否</label><br>
 <select id="traffic">
 <option>可</option><option>不可</option>
 </select>
 </div>
 
 <div class="card">
-<label>⑥ 緊急</label>
+<label>⑥ 緊急措置の必要性</label>
 <div class="grid">
 <label><input type="checkbox" id="fence">安全柵</label>
-<label><input type="checkbox" id="pump">ポンプ</label>
+<label><input type="checkbox" id="pump">仮設ポンプ</label>
 </div>
 </div>
 
@@ -146,7 +146,7 @@ function stopRecognition(){
   if (recognition) recognition.stop();
 
   document.body.classList.remove("recording");
-  document.getElementById("header").innerText = "災害調査AI音声解析デモ（Mock）";
+  document.getElementById("header").innerText = "災害調査AI音声解析デモ.";
 }
 
 
@@ -197,23 +197,23 @@ function mockAI(text){
  if(text.includes("浮")) result.road_level_difference.type="浮上";
  if(text.includes("沈")) result.road_level_difference.type="沈下";
 
- if(text.includes("陥没")) result.road_condition.push("陥没");
+ if(text.includes("陥没")||text.includes("穴")) result.road_condition.push("陥没");
  if(text.includes("波")||text.includes("隆起")) result.road_condition.push("隆起");
- if(text.includes("亀裂")) result.road_condition.push("亀裂");
+ if(text.includes("裂")) result.road_condition.push("亀裂");
  if(text.includes("水")) result.road_condition.push("冠水");
 
- if(text.includes("ヒビ")||text.includes("破損")){
+ if(text.includes("ヒビ")||text.includes("破損")||text.includes("壊")){
    result.manhole_cover="破損";
  } else if(text.includes("ガタ")||text.includes("ずれ")){
    result.manhole_cover="ずれ";
  }
 
- if(text.includes("通れ")||text.includes("危ない")){
+ if(text.includes("通れない")||text.includes("危ない")||text.includes("通行できない")||text.includes("柵")||text.includes("安全策")){
    result.vehicle_access.status="不可";
    result.emergency_actions.traffic_control.methods.push("安全柵設置");
  }
 
- if(text.includes("水")){
+ if(text.includes("水")||text.includes("ポンプ")){
    result.emergency_actions.flood_control.methods.push("仮設ポンプ");
  }
 
